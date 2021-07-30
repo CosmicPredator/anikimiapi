@@ -1,4 +1,4 @@
-<h1 style="text-align: center;">AniKimi API</h1>
+<h1 align="center">AniKimi API</h1>
 <div align="center">A Simple, LightWeight, Statically-Typed Python3 API wrapper for GogoAnime</div>
 <div align="center">The v2 of gogoanimeapi (depreciated)</div>
 <div align="center">Made with JavaScript and Python3</div>
