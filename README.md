@@ -35,9 +35,9 @@ Using [Pypi](https://pypi.org/project/anikimiapi/)
   * Visit the GogoAnime Website.
   * Login or SignUp using ur email or google.
   * Add an extension to your browser named [Get cookies.txt](https://chrome.google.com/webstore/detail/get-cookiestxt/bgaddhkoddajcdgocldbbfleckgcbcid?hl=en).
-  * Now in the GogoAnime Website, right click and select "Get cookies.txt". Refer to image [here](https://github.com/BaraniARR/anikimiapi/blob/main/assets/1.jpg)
+  * Now in the GogoAnime Website, right click and select "Get cookies.txt". Refer to image [here](https://github.com/BaraniARR/anikimiapi/blob/main/assets/1.jpg).
   * A `.txt` file will be downloaded.
-  * In the `.txt` file, find the name "gogoanime" and "auth". Refer to image [here](https://github.com/BaraniARR/anikimiapi/blob/main/assets/1.jpg)
+  * In the `.txt` file, find the name "gogoanime" and "auth". Refer to image [here](https://github.com/BaraniARR/anikimiapi/blob/main/assets/2.jpg).
   * Copy the respective tokens on the right side of the above names.
   * Keep it safely, since its your private credentials.
 
