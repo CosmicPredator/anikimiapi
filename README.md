@@ -25,7 +25,7 @@
 * Less CPU consumption.
 
 ### Installing
-Using Pypi
+Using [Pypi](https://pypi.org/project/anikimiapi/)
 
 ```$ pip3 install anikimiapi```
 
