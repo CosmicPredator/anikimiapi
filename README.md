@@ -31,6 +31,7 @@ Using [Pypi](https://pypi.org/project/anikimiapi/)
 
 ### Getting Started
 #### Pre-Requisites
+Since GogoAnime Increased their security due to content stealing, The tokens are required to bypass the security.
 * #### Getting Required Tokens
   * Visit the GogoAnime Website.
   * Login or SignUp using ur email or google.
@@ -59,7 +60,7 @@ anime = AniKimi(
 >**Note:** If GogoAnime changes their domain, use the 'host' parameter. Otherwise, leave it blank. This parameter was optional and defaults to https://gogoanime.pe/
 ###
 #### Getting Anime search results
-You can search anime by using `search_anime` method, It returns the search results as `ResultObject` which contains two arguments, the `title` and `animeid`.
+You can search anime by using `search_anime` method, It returns the search results as a List of `ResultObject` which contains two arguments, the `title` and `animeid`.
 ```python3
 from anikimiapi import AniKimi
 
