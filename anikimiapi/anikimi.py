@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import requests
 from anikimiapi.data_classes import *
 from anikimiapi.error_handlers import *
-import validators
 import re
 
 
@@ -246,8 +245,8 @@ class AniKimi:
             for l in anime_multi_link_initial:
                 get_a = l.find('a')
                 video_links = get_a['data-video']
-                valid = validators.url(video_links)
-                if valid:
+                valid = video_links[0:4]
+                if valid == "http":
                     pass
                 else:
                     video_links = f"https:{video_links}"

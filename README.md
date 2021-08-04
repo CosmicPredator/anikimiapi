@@ -1,5 +1,6 @@
-<h1 align="center">AniKimi API</h1>
+<h1 style="text-align: center;">AniKimi API</h1>
 <div align="center">A Simple, LightWeight, Statically-Typed Python3 API wrapper for GogoAnime</div>
+<div align="center">The v2 of gogoanimeapi (depreciated)</div>
 <div align="center">Made with JavaScript and Python3</div>
 
 
@@ -24,20 +25,19 @@
 * Less CPU consumption.
 
 ### Installing
-Using [Pypi](https://pypi.org/project/anikimiapi/)
+Using Pypi
 
 ```$ pip3 install anikimiapi```
 
 ### Getting Started
 #### Pre-Requisites
-Since GogoAnime Increased their security due to content stealing, The tokens are required to bypass the security.
 * #### Getting Required Tokens
   * Visit the GogoAnime Website.
   * Login or SignUp using ur email or google.
   * Add an extension to your browser named [Get cookies.txt](https://chrome.google.com/webstore/detail/get-cookiestxt/bgaddhkoddajcdgocldbbfleckgcbcid?hl=en).
-  * Now in the GogoAnime Website, right click and select "Get cookies.txt". Refer to image [here](https://github.com/BaraniARR/anikimiapi/blob/main/assets/1.jpg).
+  * Now in the GogoAnime Website, right click and select "Get cookies.txt"
   * A `.txt` file will be downloaded.
-  * In the `.txt` file, find the name "gogoanime" and "auth". Refer to image [here](https://github.com/BaraniARR/anikimiapi/blob/main/assets/2.jpg).
+  * In the `.txt` file, find the name "gogoanime" and "auth".
   * Copy the respective tokens on the right side of the above names.
   * Keep it safely, since its your private credentials.
 
@@ -59,7 +59,7 @@ anime = AniKimi(
 >**Note:** If GogoAnime changes their domain, use the 'host' parameter. Otherwise, leave it blank. This parameter was optional and defaults to https://gogoanime.pe/
 ###
 #### Getting Anime search results
-You can search anime by using `search_anime` method, It returns the search results as a List of `ResultObject` which contains two arguments, the `title` and `animeid`.
+You can search anime by using `search_anime` method, It returns the search results as `ResultObject` which contains two arguments, the `title` and `animeid`.
 ```python3
 from anikimiapi import AniKimi
 
