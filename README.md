@@ -231,4 +231,4 @@ for i in airing:
 >**Note:** If the value of count exceeds 20, The API will raise `AiringIndexError`. So, pass a value less than or equal to 20.
 
 # Copyrights ©2021 BaraniARR;
-### Licensed under GNU GPLv3 Licnense;
+### Licensed under GNU GPLv3 License;
