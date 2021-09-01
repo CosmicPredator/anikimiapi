@@ -1,4 +1,4 @@
-<h1 style="text-align: center;">AniKimi API</h1>
+<h1 align="center">AniKimi API v</h1>
 <div align="center">A Simple, LightWeight, Statically-Typed Python3 API wrapper for GogoAnime</div>
 <div align="center">The v2 of gogoanimeapi (depreciated)</div>
 <div align="center">Made with JavaScript and Python3</div>
@@ -36,9 +36,9 @@ Using Pypi
   * Visit the GogoAnime Website.
   * Login or SignUp using ur email or google.
   * Add an extension to your browser named [Get cookies.txt](https://chrome.google.com/webstore/detail/get-cookiestxt/bgaddhkoddajcdgocldbbfleckgcbcid?hl=en).
-  * Now in the GogoAnime Website, right click and select "Get cookies.txt"
+  * Now in the GogoAnime Website, right click and select "Get cookies.txt". [Refer Image](https://github.com/BaraniARR/anikimiapi/blob/main/assets/1.jpg).
   * A `.txt` file will be downloaded.
-  * In the `.txt` file, find the name "gogoanime" and "auth".
+  * In the `.txt` file, find the name "gogoanime" and "auth". [Refer Image](https://github.com/BaraniARR/anikimiapi/blob/main/assets/2.jpg).
   * Copy the respective tokens on the right side of the above names.
   * Keep it safely, since its your private credentials.
 
