@@ -1,4 +1,4 @@
-<h1 align="center">AniKimi API</h1>
+<h1 style="text-align: center;">AniKimi API</h1>
 <div align="center">A Simple, LightWeight, Statically-Typed Python3 API wrapper for GogoAnime</div>
 <div align="center">The v2 of gogoanimeapi (depreciated)</div>
 <div align="center">Made with JavaScript and Python3</div>
@@ -115,6 +115,7 @@ You can simply get the streamable and downloadable links of a specific episode o
 
 The `MediaLinksObject` returns the links, if available. Otherwise, it will return `None`. The `MediaLinksObject` has the following arguments,
 * link_hdp
+* link_sdp
 * link_360p
 * link_480p
 * link_720p
@@ -133,8 +134,15 @@ anime = AniKimi(
     auth_token="the saved auth token"
 )
 
-# Getting Anime Links
-anime_link = anime.get_episode_link(animeid="clannad-dub", episode_num=3)
+# Getting Anime Links basic method
+anime_link = anime.get_episode_link_basic(animeid="clannad-dub", episode_num=3)
+
+print(anime_link.link_hdp)
+print(anime_link.link_720p)
+print(anime_link.link_streamsb) # And many more...
+
+# Getting Anime Links advanced method
+anime_link = anime.get_episode_link_advanced(animeid="clannad-dub", episode_num=3)
 
 print(anime_link.link_hdp)
 print(anime_link.link_720p)
@@ -231,4 +239,4 @@ for i in airing:
 >**Note:** If the value of count exceeds 20, The API will raise `AiringIndexError`. So, pass a value less than or equal to 20.
 
 # Copyrights ©2021 BaraniARR;
-### Licensed under GNU GPLv3 License;
+### Licensed under GNU GPLv3 Licnense;
