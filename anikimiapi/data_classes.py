@@ -31,6 +31,7 @@ class MediaLinksObject:
                  link_720p=None,
                  link_1080p=None,
                  link_hdp=None,
+                 link_sdp=None,
                  link_streamsb=None,
                  link_xstreamcdn=None,
                  link_streamtape=None,
@@ -43,6 +44,7 @@ class MediaLinksObject:
         self.link_720p = link_720p
         self.link_1080p = link_1080p
         self.link_hdp = link_hdp
+        self.link_sdp = link_sdp
         self.link_streamsb = link_streamsb
         self. link_xstreamcdn = link_xstreamcdn
         self.link_streamtape = link_streamtape

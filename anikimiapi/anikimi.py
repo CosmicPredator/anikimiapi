@@ -36,12 +36,16 @@ class AniKimi:
     def __init__(
             self,
             gogoanime_token: str,
-            auth_token: str,
+            auth_token: str, 
             host: str = "https://gogoanime.pe/"
     ):
         self.gogoanime_token = gogoanime_token
         self.auth_token = auth_token
         self.host = host
+
+    def __str__(self) -> str:
+        return "Anikimi API - Copyrights (c) 2020-2021 BaraniARR."
+
 
     def search_anime(self, query: str) -> list:
         """The method used to search anime when a query string is passed
@@ -70,6 +74,7 @@ class AniKimi:
             for results in search_results:
                 print(results.title)
                 print(results.animeid)
+
         """
         try:
             url1 = f"{self.host}/search.html?keyword={query}"
@@ -168,7 +173,7 @@ class AniKimi:
         except requests.exceptions.ConnectionError:
             raise NetworkError("Unable to connect to the Server, Check your connection")
 
-    def get_episode_link(self, animeid: str, episode_num: int) -> MediaLinksObject:
+    def get_episode_link_advanced(self, animeid: str, episode_num: int) -> MediaLinksObject:
         """Get streamable and downloadable links for a given animeid and episode number.
         If the link is not found, then this method will return ``None`` .
 
@@ -254,20 +259,20 @@ class AniKimi:
             anime_multi_link_initial.remove(anime_multi_link_initial[0])
             for other_links in anime_multi_link_initial:
                 get_a_other = other_links.find('a')
-                video_link_other = get_a_other['data-video']  # video links other websites
-                quality_name_others = other_links.text.strip().split('C')[0]  # other links name quality
-                if quality_name_others == "Streamsb":
-                    links_final.link_streamsb = video_link_other
-                elif quality_name_others == "Xstreamcdn":
-                    links_final.link_xstreamcdn = video_link_other
-                elif quality_name_others == "Streamtape":
-                    links_final.link_streamtape = video_link_other
-                elif quality_name_others == "Mixdrop":
-                    links_final.link_mixdrop = video_link_other
-                elif quality_name_others == "Mp4Upload":
-                    links_final.link_mp4upload = video_link_other
-                elif quality_name_others == "Doodstream":
-                    links_final.link_doodstream = video_link_other
+                downlink = get_a_other['data-video']  # video links other websites
+                quality_name = other_links.text.strip().split('C')[0]  # other links name quality
+                if quality_name == "Streamsb":
+                    links_final.link_streamsb = downlink
+                elif quality_name == "Xstreamcdn":
+                    links_final.link_xstreamcdn = downlink
+                elif quality_name == "Streamtape":
+                    links_final.link_streamtape = downlink
+                elif quality_name == "Mixdrop":
+                    links_final.link_mixdrop = downlink
+                elif quality_name == "Mp4Upload":
+                    links_final.link_mp4upload = downlink
+                elif quality_name == "Doodstream":
+                    links_final.link_doodstream = downlink
             res = requests.get(chumma_list[0])
             plain = res.text
             s = BeautifulSoup(plain, "lxml")
@@ -284,6 +289,103 @@ class AniKimi:
             raise NetworkError("Unable to connect to the Server, Check your connection")
         except TypeError:
             raise InvalidTokenError("Invalid tokens passed, Check your tokens")
+
+    def get_episode_link_basic(self, animeid: str, episode_num: int) -> MediaLinksObject():
+        """Get streamable and downloadable links for a given animeid and episode number.
+        If the link is not found, then this method will return ``None`` .
+
+        Parameters:
+             animeid(``str``):
+                The animeid of the anime you want to download.
+
+             episode_num(``int``):
+                The episode number of the anime you want to download.
+
+        Returns:
+            :obj:`-anikimiapi.data_classes.MediaLinksObject`: On success, the links of the anime is returned.
+
+        Example:
+        .. code-block:: python
+            :emphasize-lines: 1,4-7,10-13
+
+            from anikimiapi import AniKimi
+
+            # Authorize the api to GogoAnime
+            anime = AniKimi(
+                gogoanime_token="baikdk32hk1nrek3hw9",
+                auth_token="NCONW9H48HNFONW9Y94NJT49YTHO45TU4Y8YT93HOGFNRKBI"
+            )
+
+            # Get anime Link
+            link = anime.get_episode_link(animeid="clannad-dub", episode_num=3)
+            print(link.link_hdp)
+            print(link.link_360p)
+            print(link.link_streamtape)
+
+            # and many more...
+        """
+        try:
+            animelink = f'{self.host}category/{animeid}'
+            response = requests.get(animelink)
+            plainText = response.text
+            soup = BeautifulSoup(plainText, "lxml")
+            lnk = soup.find(id="episode_page")
+            source_url = lnk.find("li").a
+            tit_url = soup.find("div", {"class": "anime_info_body_bg"}).h1.string
+            URL_PATTERN = '{}{}-episode-{}'
+            url = URL_PATTERN.format(self.host, animeid, episode_num)
+            srcCode = requests.get(url)
+            plainText = srcCode.text
+            soup = BeautifulSoup(plainText, "lxml")
+            source_url = soup.find("li", {"class": "dowloads"}).a
+            vidstream_link = source_url.get('href')
+            # print(vidstream_link)
+            URL = vidstream_link
+            dowCode = requests.get(URL)
+            data = dowCode.text
+            soup = BeautifulSoup(data, "lxml")
+            dow_url= soup.findAll('div',{'class':'dowload'})
+            episode_res_link = {'title':f"{tit_url}"}
+            links_final = MediaLinksObject()
+            for i in range(len(dow_url)):
+                Url = dow_url[i].find('a')
+                downlink = Url.get('href')
+                str_= Url.string
+                str_spl = str_.split()
+                str_spl.remove(str_spl[0])
+                str_original = ""
+                quality_name = str_original.join(str_spl)
+                episode_res_link.update({f"{quality_name}":f"{downlink}"})
+                if "(HDP-mp4)" in quality_name:
+                    links_final.link_hdp = downlink
+                elif "(SDP-mp4)" in quality_name:
+                    links_final.link_sdp = downlink
+                elif "(360P-mp4)" in quality_name:
+                    links_final.link_360p = downlink
+                elif "(720P-mp4)" in quality_name:
+                    links_final.link_720p = downlink
+                elif "(1080P-mp4)" in quality_name:
+                    links_final.link_1080p = downlink
+                elif "Streamsb" in quality_name:
+                    links_final.link_streamsb = downlink
+                elif "Xstreamcdn" in quality_name:
+                    links_final.link_xstreamcdn = downlink
+                elif "Streamtape" in quality_name:
+                    links_final.link_streamtape = downlink
+                elif "Mixdrop" in quality_name:
+                    links_final.link_mixdrop = downlink
+                elif "Mp4Upload" in quality_name:
+                    links_final.link_mp4upload = downlink
+                elif "Doodstream" in quality_name:
+                    links_final.link_doodstream = downlink
+            return links_final
+        except AttributeError:
+            raise InvalidAnimeIdError("Invalid animeid or episode_num given")
+        except requests.exceptions.ConnectionError:
+            raise NetworkError("Unable to connect to the Server, Check your connection")
+        except TypeError:
+            raise InvalidTokenError("Invalid tokens passed, Check your tokens")            
+        
 
     def get_by_genres(self, genre_name, page) -> list:
         """Get anime by genres, The genre object has the following genres working,
