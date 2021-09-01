@@ -17,7 +17,6 @@
 
  > Note: You should rewrite the API part of your app to function properly. I'm really sorry becoz you must rewrite your code to make your app support the latest release.
 
----
 
 ## v0.1.3-beta (01.08.2021)
 
@@ -28,7 +27,6 @@
 ### Bug Fixes:
 - Removed an unwanted dependency "validtors".
 
----
 
 ## v0.1.1-beta (30.07.2021)
 
