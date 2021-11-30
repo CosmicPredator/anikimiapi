@@ -386,8 +386,8 @@ class AniKimi:
         except TypeError:
             raise InvalidTokenError("Invalid tokens passed, Check your tokens")            
         
+    def get_by_genres(self,genre_name, limit=60 ) -> list :
 
-    def get_by_genres(self, genre_name, page) -> list:
         """Get anime by genres, The genre object has the following genres working,
 
         action, adventure, cars, comedy, dementia, demons, drama, dub, ecchi, fantasy,
@@ -400,8 +400,9 @@ class AniKimi:
         Parameters:
             genre_name(``str``):
                 The name of the genre. You should use any from the above mentioned genres.
-            page(``int``):
-                The page number of the genre results.
+
+            limit(``int``):
+                The limit for the number of anime you want from the results. defaults to 60 (i.e, 3 pages)
 
         Returns:
             List of :obj:`-anikimiapi.data_classes.ResultObject`: On Success, the list of genre results is returned.
@@ -424,19 +425,72 @@ class AniKimi:
                 print(result.title)
                 print(result.animeid)
         """
-        try:
-            url = f"{self.host}genre/{genre_name}?page={page}"
-            response = requests.get(url)
-            plainText = response.text
-            soup = BeautifulSoup(plainText, "lxml")
-            animes = soup.find("ul", {"class": "items"}).find_all("li")
-            gen_ani = []
-            for anime in animes:  # For every anime found
+        gen_ani = []
+
+        def page_anime_scraper(soup_object) -> list:
+            """a helper function to scrape anime results from page source"""
+            ani_results = []
+            animes = soup_object.find("ul", {"class": "items"}).find_all("li")
+            for anime in animes:
                 tits = anime.a["title"]
                 urll = anime.a["href"]
                 r = urll.split('/')
-                gen_ani.append(ResultObject(title=f"{tits}", animeid=f"{r[2]}"))
+                ani_results.append(ResultObject(title=f"{tits}", animeid=f"{r[2]}"))
+            return ani_results
+
+        def pagination_helper(current_page_source : str,url,limit:int) -> None:
+            """a recursive helper function which helps to successively scrape anime from following pages
+                 (if there are any) till limit is reached. """
+            soup = BeautifulSoup(current_page_source,"lxml")
+            next_page = soup.find("li",{"class": "selected"}).findNext('li')
+
+            
+            if (type(next_page) is not None):
+
+                try :
+
+                    [next_page_value] = [i.get('data-page') for i in next_page]
+                    next_page_url = f'{url}{next_page_value}'
+                    next_page_src = (requests.get(next_page_url)).text
+
+                    soup = BeautifulSoup(next_page_src,"lxml")
+
+                    #next/subsequent page results
+                    next_page_results = page_anime_scraper(soup)
+                    for anime in next_page_results:
+                        if (len(gen_ani) < limit):
+                            gen_ani.append(anime)
+                        else:
+                            pass
+                    if (len(gen_ani) == limit):
+                        pass
+                    else:
+                        pagination_helper(next_page_src,url,limit)
+
+                except AttributeError:
+                    pass
+
+            else:
+                pass
+            
+        try:
+            url = f"{self.host}genre/{genre_name}?page="
+            response =  requests.get(url)
+            plainText = response.text
+            soup = BeautifulSoup(plainText,"lxml")
+            
+            # starting page
+            starting_page_results = page_anime_scraper(soup)
+            for anime in starting_page_results :
+                if (len(gen_ani) < limit):
+                    gen_ani.append(anime)
+                else:
+                    pass
+
+            pagination_helper(current_page_source=plainText,url=url,limit=limit)
+
             return gen_ani
+
         except AttributeError or KeyError:
             raise InvalidGenreNameError("Invalid genre_name or page_num")
         except requests.exceptions.ConnectionError:
