@@ -5,7 +5,6 @@ from anikimiapi.data_classes import *
 from anikimiapi.error_handlers import *
 import re
 
-
 class AniKimi:
     """The `AniKimi` class which authorizes the gogoanime client.
 
@@ -17,6 +16,8 @@ class AniKimi:
         host (``str``):
             Change the base url, If gogoanime changes the domain, replace the url
             with the new domain. Defaults to https://gogoanime.pe/ .
+        user_agent (``dict``):
+             user_agent header for requests to the host. no need to set/change this.
 
     Example:
         .. code-block:: python
@@ -37,11 +38,13 @@ class AniKimi:
             self,
             gogoanime_token: str,
             auth_token: str, 
-            host: str = "https://gogoanime.pe/"
+            host: str = "https://gogoanime.pe/",
+            user_agent:dict = {'User-Agent': 'Mozilla/5.0'},
     ):
         self.gogoanime_token = gogoanime_token
         self.auth_token = auth_token
         self.host = host
+        self.user_agent=user_agent
 
     def __str__(self) -> str:
         return "Anikimi API - Copyrights (c) 2020-2021 BaraniARR."
@@ -79,7 +82,7 @@ class AniKimi:
         try:
             url1 = f"{self.host}/search.html?keyword={query}"
             session = HTMLSession()
-            response = session.get(url1)
+            response = session.get(url1,headers=self.user_agent)
             response_html = response.text
             soup = BeautifulSoup(response_html, 'html.parser')
             animes = soup.find("ul", {"class": "items"}).find_all("li")
@@ -127,7 +130,7 @@ class AniKimi:
         """
         try:
             animelink = f'{self.host}category/{animeid}'
-            response = requests.get(animelink)
+            response = requests.get(animelink,headers=self.user_agent)
             plainText = response.text
             soup = BeautifulSoup(plainText, "lxml")
             source_url = soup.find("div", {"class": "anime_info_body_bg"}).img
@@ -211,7 +214,7 @@ class AniKimi:
             ep_num_link_get = episode_num
             str_qry_final = animeid
             animelink = f'{self.host}category/{str_qry_final}'
-            response = requests.get(animelink)
+            response = requests.get(animelink,headers=self.user_agent)
             plainText = response.text
             soup = BeautifulSoup(plainText, "lxml")
             lnk = soup.find(id="episode_page")
@@ -226,7 +229,7 @@ class AniKimi:
                 'gogoanime': self.gogoanime_token,
                 'auth': self.auth_token
             }
-            response = requests.get(url=url, cookies=cookies)
+            response = requests.get(url=url, cookies=cookies,headers=self.user_agent)
             plaintext = response.text
             soup = BeautifulSoup(plaintext, "lxml")
             download_div = soup.find("div", {'class': 'cf-download'}).findAll('a')
@@ -273,7 +276,7 @@ class AniKimi:
                     links_final.link_mp4upload = downlink
                 elif quality_name == "Doodstream":
                     links_final.link_doodstream = downlink
-            res = requests.get(chumma_list[0])
+            res = requests.get(chumma_list[0],headers=self.user_agent)
             plain = res.text
             s = BeautifulSoup(plain, "lxml")
             t = s.findAll('script')
@@ -326,7 +329,7 @@ class AniKimi:
         """
         try:
             animelink = f'{self.host}category/{animeid}'
-            response = requests.get(animelink)
+            response = requests.get(animelink,headers=self.user_agent)
             plainText = response.text
             soup = BeautifulSoup(plainText, "lxml")
             lnk = soup.find(id="episode_page")
@@ -334,14 +337,14 @@ class AniKimi:
             tit_url = soup.find("div", {"class": "anime_info_body_bg"}).h1.string
             URL_PATTERN = '{}{}-episode-{}'
             url = URL_PATTERN.format(self.host, animeid, episode_num)
-            srcCode = requests.get(url)
+            srcCode = requests.get(url,headers=self.user_agent)
             plainText = srcCode.text
             soup = BeautifulSoup(plainText, "lxml")
             source_url = soup.find("li", {"class": "dowloads"}).a
             vidstream_link = source_url.get('href')
             # print(vidstream_link)
             URL = vidstream_link
-            dowCode = requests.get(URL)
+            dowCode = requests.get(URL,headers=self.user_agent)
             data = dowCode.text
             soup = BeautifulSoup(data, "lxml")
             dow_url= soup.findAll('div',{'class':'dowload'})
@@ -451,7 +454,7 @@ class AniKimi:
 
                     [next_page_value] = [i.get('data-page') for i in next_page]
                     next_page_url = f'{url}{next_page_value}'
-                    next_page_src = (requests.get(next_page_url)).text
+                    next_page_src = (requests.get(next_page_url,headers=self.user_agent)).text
 
                     soup = BeautifulSoup(next_page_src,"lxml")
 
@@ -475,7 +478,7 @@ class AniKimi:
             
         try:
             url = f"{self.host}genre/{genre_name}?page="
-            response =  requests.get(url)
+            response =  requests.get(url,headers=self.user_agent)
             plainText = response.text
             soup = BeautifulSoup(plainText,"lxml")
             
@@ -529,7 +532,7 @@ class AniKimi:
             else:
                 url = f"{self.host}"
                 session = HTMLSession()
-                response = session.get(url)
+                response = session.get(url,headers=self.user_agent)
                 response_html = response.text
                 soup = BeautifulSoup(response_html, 'html.parser')
                 anime = soup.find("nav", {"class": "menu_series cron"}).find("ul")
